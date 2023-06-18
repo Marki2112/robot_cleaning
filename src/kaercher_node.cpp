@@ -31,14 +31,14 @@ double cleaning_robot::calculatePath(Json::Value robot_path){
     for(Json::ArrayIndex i = 0; i < robot_path.size() - 1; i++){
         double x1 = robot_path[i][0].asDouble();
         double y1 = robot_path[i][1].asDouble();
-        double x2 = robot_path[i][0].asDouble();
-        double y2 = robot_path[i][1].asDouble();
-    
+        double x2 = robot_path[i+1][0].asDouble();
+        double y2 = robot_path[i+1][1].asDouble();
 
-        total_distance = calculateDistance(x1, y1, x2, y2);
-        total_distance += total_distance;
+        double distance = calculateDistance(x1, y1, x2, y2);
+
+        total_distance += distance;
+ 
     }
-
     return total_distance;
 }
 
@@ -71,7 +71,7 @@ double cleaning_robot::calculateVelocity(float kappa){
     return velRobot;
 }
 
-double cleaning_robot::calculateCleaningArea(Json::Value lengthCleaningGadget, Json::Value path){
+double cleaning_robot::calculateCleaningArea(Json::Value robot, Json::Value lengthCleaningGadget, Json::Value path){
     /*
     Need the lenghts of the cleaning Gadget from the Json
     Need the complete Path of the Robot
@@ -91,6 +91,7 @@ double cleaning_robot::calculateTimeOfPath(){
 }
 
 Json::Value cleaning_robot::getRobotInfo(std::string info) const {
+    // check if info in the json file 
     return robot_info[info];
 }
 
@@ -98,14 +99,18 @@ int main(int argc, char** argv){
     ros::init(argc, argv, "kaercher");
     cleaning_robot cleaning_robot;
 
-    // getting path information from json-file
+    // getting the information from json-file
     Json::Value robot_path = cleaning_robot.getRobotInfo("path");
+    Json::Value robot_cleaning_gadget = cleaning_robot.getRobotInfo("cleaning_gadget");
+    Json::Value robot = cleaning_robot.getRobotInfo("robot");
+
     // calculating the total_distance and printing out
     double total_distance = cleaning_robot.calculatePath(robot_path);
     std::cout << "The total_distance is: " << total_distance << std::endl;
 
-    Json::Value robot_cleaning_gadget = cleaning_robot.getRobotInfo("cleaning_gadget");
-    double cleaning_area = cleaning_robot.calculateCleaningArea(robot_cleaning_gadget, robot_path);
+    //Calculate the cleaning Area 
+    //ouble cleaning_area = cleaning_robot.calculateCleaningArea(robot, robot_cleaning_gadget, robot_path);
+    //std::cout << "CleaningArea: " << cleaning_area << std::endl;
 
     ros::spin();
 }
