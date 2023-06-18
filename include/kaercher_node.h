@@ -15,7 +15,7 @@ class cleaning_robot{
 
         Json::Value robot_info;
         double calculatePath(Json::Value robot_path);
-        double calculateCleaningArea(Json::Value lengthCleaningGadget, Json::Value path);
+        double calculateCleaningArea(Json::Value robot, Json::Value lengthCleaningGadget, Json::Value path);
         double calculateTimeOfPath();
         Json::Value getRobotInfo(std::string info) const;
 
