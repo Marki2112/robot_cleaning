@@ -1,0 +1,6 @@
+<launch>
+    <node name="kaercher" pkg="kaercher" type="kaercher_node" output="screen">
+        <param name="jsonfile" type="string" value="$(find kaercher)/config/02_short.json"/>
+    </node>
+
+</launch>
