@@ -8,11 +8,11 @@
 #include "ros/ros.h"
 #include <ros/console.h>
 
-class Test{
+class cleaning_robot{
 
     public:
-        Test();
-        ~Test();
+        cleaning_robot();
+        ~cleaning_robot();
 
 
     private:
@@ -26,7 +26,7 @@ class Test{
         double calculateTimeOfPath();
 };
 
-Test::Test(){
+cleaning_robot::cleaning_robot(){
     ros::NodeHandle private_nh("~");
     
     // Check if json available?
@@ -38,28 +38,26 @@ Test::Test(){
         // aus Programm springen
         ROS_ERROR("JSON-File is not available"); 
     }
+
+}
+
+cleaning_robot::~cleaning_robot(){
     
 }
 
-Test::~Test(){
-    
-}
-
-Json::Value Test::readJsonFIle(std::string jsonfile){
+Json::Value cleaning_robot::readJsonFIle(std::string jsonfile){
     std::ifstream robot_file(jsonfile);
     Json::Value robot_information;
     Json::Reader reader;
     reader.parse(robot_file, robot_information);
-    std::cout << robot_information["robot"][0];
-
     return robot_information;
 }
 
-double Test::calculateDistance(double x1, double y1, double x2, double y2){
+double cleaning_robot::calculateDistance(double x1, double y1, double x2, double y2){
     return std::sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
 } 
 // Changing Datetype to make it more flexible
-double Test::calculatePath(std::vector<double>& x_points, std::vector<double>& y_points){
+double cleaning_robot::calculatePath(std::vector<double>& x_points, std::vector<double>& y_points){
     double total_distance = 0.0;
 
     for(size_t i = 0; i < x_points.size() - 1; i++){
@@ -75,7 +73,7 @@ double Test::calculatePath(std::vector<double>& x_points, std::vector<double>& y
     return total_distance;
 }
 
-double Test::calculateVelocity(float kappa){
+double cleaning_robot::calculateVelocity(float kappa){
     /*
     Kappa is be calculated from the path --> Curvature
     possile three velocity outcomes:
@@ -104,7 +102,7 @@ double Test::calculateVelocity(float kappa){
     return velRobot;
 }
 
-double Test::calculateCleaningArea(double lengthCleaningGadget, double path){
+double cleaning_robot::calculateCleaningArea(double lengthCleaningGadget, double path){
     /*
     Need the lenghts of the cleaning Gadget from the Json
     Need the complete Path of the Robot
@@ -118,13 +116,14 @@ double Test::calculateCleaningArea(double lengthCleaningGadget, double path){
     return cleaningArea;
 }
 
-double Test::calculateTimeOfPath(){
+// Need Velocity and Path to get the time
+double cleaning_robot::calculateTimeOfPath(){
     return 0.0;
 }
 
 int main(int argc, char** argv){
     ros::init(argc, argv, "kaercher");
-    Test test;
+    cleaning_robot cleaning_robot;
 
     ros::spin();
 }
