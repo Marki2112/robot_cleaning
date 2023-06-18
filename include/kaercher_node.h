@@ -2,6 +2,13 @@
 #define KAERCHER_H_
 
 #include <jsoncpp/json/value.h>
+#include <jsoncpp/json/reader.h>
+#include <string>
+#include <cmath>
+#include <vector>
+#include <numeric>
+#include <iostream>
+#include <fstream>
 
 #include "ros/ros.h"
 #include <ros/console.h>
@@ -22,7 +29,7 @@ class cleaning_robot{
     private:
         std::string jsonfile;
         Json::Value robot_info;
-        Json::Value readJsonFIle(std::string jsonfile);
+        Json::Value readJsonFile(std::string jsonfile);
         double calculateVelocity(double Kappa);
         std::pair<std::vector<double>, std::vector<double>> createVector(Json::Value robot_path);
 };
@@ -33,7 +40,7 @@ cleaning_robot::cleaning_robot(){
     // Check if json available?
     if(private_nh.getParam("jsonfile", jsonfile)){
         ROS_INFO("Read Json-File");
-        robot_info = readJsonFIle(jsonfile);
+        robot_info = readJsonFile(jsonfile);
     }
     else{
         // aus Programm springen

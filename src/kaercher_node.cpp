@@ -3,20 +3,10 @@ name: Markus Joos
 Date: 18.06.2023
 */
 
-#include <iostream>
-#include <fstream>
-#include <jsoncpp/json/reader.h>
-#include <string>
-#include <cmath>
-#include <vector>
-#include <numeric>
-
-#include "ros/ros.h"
-#include <ros/console.h>
-
 #include "kaercher_node.h"
 
-Json::Value cleaning_robot::readJsonFIle(std::string jsonfile){
+// reading the jsonfile, which is needed
+Json::Value cleaning_robot::readJsonFile(std::string jsonfile){
     std::ifstream robot_file(jsonfile);
     Json::Value robot_information;
     Json::Reader reader;
@@ -25,16 +15,17 @@ Json::Value cleaning_robot::readJsonFIle(std::string jsonfile){
     return robot_information;
 }
 
-
+// calculating the distance from the robotspaths
 std::vector<double> cleaning_robot::calculateDistance(Json::Value robot_path){
     
     std::vector<double> distance_vec;
+    // creating vector from the json_file
     std::pair<std::vector<double>, std::vector<double>> points = createVector(robot_path);
     
     std::vector<double> x_points = points.first;
     std::vector<double> y_points = points.second;
 
-    // Calculating not the exact path 
+    // Calculating the exact path 
     for(size_t i = 0; i < x_points.size() - 1; i++){
         double x1 = x_points[i];
         double y1 = y_points[i];
@@ -63,6 +54,7 @@ std::pair<std::vector<double>, std::vector<double>> cleaning_robot::createVector
     return std::make_pair(x_points, y_points);
 }
 
+// Calculating the total_distance from an distance vector
 double cleaning_robot::calculatePath(std::vector<double> distance){
     double total_distance = 0.0;
 
@@ -72,14 +64,8 @@ double cleaning_robot::calculatePath(std::vector<double> distance){
     return total_distance;
 }
 
+// Calculating the velocity depends on the curvature of the distance
 double cleaning_robot::calculateVelocity(double curvature){
-    /*
-    Kappa is be calculated from the path --> Curvature kappa 1/distance approximately
-    possile three velocity outcomes:
-    1. straights and flat curves            --> max Velocity
-    2. kappa is given                       --> calculate the velocity
-    3. kappa is higher then kappa_max       --> min. Velocity
-    */  
 
     double velRobot;
     double k_krit = 0.5;                        // Unit 1/m
@@ -88,9 +74,18 @@ double cleaning_robot::calculateVelocity(double curvature){
     double vmax = 1.1;                          // Unit m/s
 
     // Check if kappa bigger then kappa_max 
-    bool test1 = curvature <= k_krit;
+    // For Debug Purpose
+    /*bool test1 = curvature <= k_krit;
     bool test2 = 0.5 <= curvature && curvature < 10.0;
-    bool test3 = k_max <= curvature;
+    bool test3 = k_max <= curvature;*/
+
+    /*
+    Kappa is be calculated from the path --> Curvature kappa 1/distance approximately
+    possile three velocity outcomes:
+    1. straights and flat curves            --> max Velocity curvature --> k_krit
+    2. kappa is given                       --> calculate the velocity 
+    3. kappa is higher then kappa_max       --> min. Velocity --> k_krit <= curvature && curvature < k_max
+    */  
 
     if(curvature <= k_krit){
         velRobot = vmax;
@@ -102,7 +97,7 @@ double cleaning_robot::calculateVelocity(double curvature){
         velRobot = vmax - ((vmax-vmin)/(k_max - k_krit))*(curvature-k_krit);
     }
 
-    std::cout << curvature << " " << velRobot << " " << test1 << " " << test3 << " " << test2 << std::endl;
+    //std::cout << curvature << " " << velRobot << " " << test1 << " " << test3 << " " << test2 << std::endl;
 
     return velRobot;
 }
@@ -131,7 +126,6 @@ double cleaning_robot::calculateTimeOfPath(std::vector<double> distance){
         double dist = distance[i];
         curvature = 1/dist;
         velocity = calculateVelocity(curvature);
-        //std::cout << velocity << " " << dist << " " << curvature << std::endl;
         time = dist/velocity;
         total_time += time;
     }
@@ -140,7 +134,7 @@ double cleaning_robot::calculateTimeOfPath(std::vector<double> distance){
 }
 
 Json::Value cleaning_robot::getRobotInfo(std::string info) const {
-    // check if info in the json file 
+    // check if info in the json file (key)
     return robot_info[info];
 }
 
