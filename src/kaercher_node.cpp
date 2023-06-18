@@ -102,15 +102,10 @@ double cleaning_robot::calculateVelocity(double curvature){
     return velRobot;
 }
 
-double cleaning_robot::calculateCleaningArea(Json::Value robot, Json::Value lengthCleaningGadget, Json::Value path){
-    /*
-    Need the lenghts of the cleaning Gadget from the Json
-    Need the complete Path of the Robot
-    */
-
-
-
-    double cleaningArea=0.0;
+double cleaning_robot::calculateCleaningArea(Json::Value robot, Json::Value CleaningGadget, Json::Value path){
+    
+    double cleaningArea = 0.0;
+    std::vector<double> distance = calculateDistance(path);
 
     // driving straight is the cleaningArea lengthCleaningGadget * path 
     // drinving curve is a little bit complicated --> M_PI * cleaning_gadget * curvature
