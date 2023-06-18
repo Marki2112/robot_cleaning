@@ -13,17 +13,18 @@ class cleaning_robot{
         cleaning_robot();
         ~cleaning_robot();
 
-        Json::Value robot_info;
-        double calculatePath(Json::Value robot_path);
         double calculateCleaningArea(Json::Value robot, Json::Value lengthCleaningGadget, Json::Value path);
-        double calculateTimeOfPath();
+        double calculateTimeOfPath(std::vector<double> distance);
         Json::Value getRobotInfo(std::string info) const;
+        double calculatePath(std::vector<double> distance);
+        std::vector<double> calculateDistance(Json::Value robot_path);
 
     private:
         std::string jsonfile;
+        Json::Value robot_info;
         Json::Value readJsonFIle(std::string jsonfile);
-        double calculateDistance(double x1, double y1, double x2, double y2);
-        double calculateVelocity(float Kappa);
+        double calculateVelocity(double Kappa);
+        std::pair<std::vector<double>, std::vector<double>> createVector(Json::Value robot_path);
 };
 
 cleaning_robot::cleaning_robot(){
