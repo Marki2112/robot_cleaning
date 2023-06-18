@@ -71,7 +71,7 @@ double cleaning_robot::calculateVelocity(float kappa){
     return velRobot;
 }
 
-double cleaning_robot::calculateCleaningArea(double lengthCleaningGadget, double path){
+double cleaning_robot::calculateCleaningArea(Json::Value lengthCleaningGadget, Json::Value path){
     /*
     Need the lenghts of the cleaning Gadget from the Json
     Need the complete Path of the Robot
@@ -104,8 +104,8 @@ int main(int argc, char** argv){
     double total_distance = cleaning_robot.calculatePath(robot_path);
     std::cout << "The total_distance is: " << total_distance << std::endl;
 
-    
-
+    Json::Value robot_cleaning_gadget = cleaning_robot.getRobotInfo("cleaning_gadget");
+    double cleaning_area = cleaning_robot.calculateCleaningArea(robot_cleaning_gadget, robot_path);
 
     ros::spin();
 }
