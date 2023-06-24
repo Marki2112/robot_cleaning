@@ -9,11 +9,31 @@ Date: 18.06.2023
 
 int main(int argc, char** argv){
     ros::init(argc, argv, "kaercher");
-    cleaning_robot cleaning_robot;
 
+    ros::NodeHandle private_nh("~");
+
+    cleaning_robot cleaning_robot;
+    std::string jsonfile;
+    Json::Value robot_info;
+
+    // Check if json available?
+    if(private_nh.getParam("jsonfile", jsonfile)){
+        ROS_INFO("Read Json-File");
+        robot_info = cleaning_robot.readJsonFile(jsonfile);
+    }
+    else{
+        ROS_ERROR("JSON-File is not available");
+        return -1;
+    }
+    
     // getting the information from json-file
-    Json::Value robot_path = cleaning_robot.getRobotInfo("path");
-    Json::Value robot_cleaning_gadget = cleaning_robot.getRobotInfo("cleaning_gadget");
+    Json::Value robot_path = robot_info["path"];
+    Json::Value robot_cleaning_gadget = robot_info["cleaning_gadget"];
+
+    if (robot_cleaning_gadget.empty() or robot_path.empty())
+    {
+        return -1;
+    }
 
     // calculating the total_distance and printing out
     std::vector<double> distance = cleaning_robot.calculateDistance(robot_path);
@@ -29,4 +49,6 @@ int main(int argc, char** argv){
     std::cout << "The total travel time is: " << total_time << std::endl;
 
     ros::spin();
+    
+    return 0;
 }

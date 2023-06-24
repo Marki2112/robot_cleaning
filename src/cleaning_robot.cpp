@@ -11,11 +11,6 @@ Json::Value cleaning_robot::readJsonFile(std::string jsonfile){
     return robot_information;
 }
 
-Json::Value cleaning_robot::getRobotInfo(std::string info) const {
-    // check if info in the json file (key)
-    return robot_info[info];
-}
-
 // Creating from json_file an vector;
 std::vector<Point> cleaning_robot::createVector(Json::Value robot_path){
     
@@ -31,7 +26,7 @@ std::vector<Point> cleaning_robot::createVector(Json::Value robot_path){
     return waypoints;
 }
 
-double cleaning_robot::calculateLength(const Point start, const Point end){
+double cleaning_robot::calculateLength(const Point& start, const Point& end){
     double length; 
     
     length = std::sqrt(pow(end.x - start.x, 2) + pow(end.y - start.y, 2));
