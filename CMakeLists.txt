@@ -123,9 +123,9 @@ include_directories(
 )
 
 ## Declare a C++ library
-# add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/kaercher_pkg.cpp
-# )
+add_library(cleaning_robot
+  src/cleaning_robot.cpp
+)
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -152,6 +152,7 @@ add_executable(${PROJECT_NAME}_node src/kaercher_node.cpp)
    ${catkin_LIBRARIES}
    ${JSONCPP_LIBRARIES}
    jsoncpp
+   cleaning_robot
  )
 
 #############

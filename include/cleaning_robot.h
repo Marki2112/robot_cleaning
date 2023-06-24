@@ -33,11 +33,11 @@ class cleaning_robot{
     private:
         std::string jsonfile;
         Json::Value robot_info;
+
         Json::Value readJsonFile(std::string jsonfile);
         double calculateVelocity(double Kappa);
-        std::pair<std::vector<double>, std::vector<double>> createVector(Json::Value robot_path);
-        bool doLineSegmentsIntersect(const Point& p1, const Point& p2, const Point& p3, const Point& p4);
-        double calculateDistance(const Point& p1, const Point& p2);
+        std::vector<Point> createVector(Json::Value robot_path);
+        double calculateLength(const Point start, const Point end);
 };
 
 cleaning_robot::cleaning_robot(){
