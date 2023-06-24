@@ -13,6 +13,10 @@
 #include "ros/ros.h"
 #include <ros/console.h>
 
+struct Point {
+    double x;
+    double y;
+};
 
 class cleaning_robot{
 
@@ -20,7 +24,7 @@ class cleaning_robot{
         cleaning_robot();
         ~cleaning_robot();
 
-        double calculateCleaningArea(Json::Value robot, Json::Value lengthCleaningGadget, Json::Value path);
+        double calculateCleaningArea(Json::Value lengthCleaningGadget, std::vector<double> distance);
         double calculateTimeOfPath(std::vector<double> distance);
         Json::Value getRobotInfo(std::string info) const;
         double calculatePath(std::vector<double> distance);
@@ -32,6 +36,8 @@ class cleaning_robot{
         Json::Value readJsonFile(std::string jsonfile);
         double calculateVelocity(double Kappa);
         std::pair<std::vector<double>, std::vector<double>> createVector(Json::Value robot_path);
+        bool doLineSegmentsIntersect(const Point& p1, const Point& p2, const Point& p3, const Point& p4);
+        double calculateDistance(const Point& p1, const Point& p2);
 };
 
 cleaning_robot::cleaning_robot(){
@@ -44,7 +50,7 @@ cleaning_robot::cleaning_robot(){
     }
     else{
         // aus Programm springen
-        ROS_ERROR("JSON-File is not available"); 
+        ROS_ERROR("JSON-File is not available");
     }
 
 }

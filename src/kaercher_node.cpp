@@ -102,22 +102,40 @@ double cleaning_robot::calculateVelocity(double curvature){
     return velRobot;
 }
 
-double cleaning_robot::calculateCleaningArea(Json::Value robot, Json::Value CleaningGadget, Json::Value path){
-    
-    double cleaningArea = 0.0;
-    std::vector<double> distance = calculateDistance(path);
+// Function to check if two line segments intersect
+bool doLineSegmentsIntersect(const Point& p1, const Point& p2, const Point& p3, const Point& p4) {
+    // Code to check for line segment intersection (e.g., using the Cohen-Sutherland algorithm)
+    // Return true if the line segments intersect, false otherwise
+}
 
-    // driving straight is the cleaningArea lengthCleaningGadget * path 
-    // drinving curve is a little bit complicated --> M_PI * cleaning_gadget * curvature
+double cleaning_robot::calculateCleaningArea(Json::Value CleaningGadget, std::vector<double> distance){
     
-    return cleaningArea;
+    double resCleaningArea = 0.0;
+    double cleaningArea = 0.0;
+    double lenghtOfCleanGadget = 0.0;
+    double dist = 0.0;
+    
+    // calculating the lenght of the cleaning device
+    lenghtOfCleanGadget = fabs(CleaningGadget[0][1].asDouble()) + fabs(CleaningGadget[1][1].asDouble());
+    
+    // Calculating the Area of Cleaning    
+    for(size_t i = 0; i <= distance.size(); i++)
+    {   
+        dist = distance[i];
+        cleaningArea = lenghtOfCleanGadget * dist;
+        std::cout << dist << " " << lenghtOfCleanGadget << " " << cleaningArea << std::endl;
+        resCleaningArea += cleaningArea;
+    }
+
+
+    return resCleaningArea;
 }
 
 // Need Velocity and Path to get the time
 double cleaning_robot::calculateTimeOfPath(std::vector<double> distance){
     double curvature, total_time, time, velocity;
 
-    for(size_t i = 0; i < distance.size(); i++){
+    for(size_t i = 0; i <= distance.size(); i++){
         double dist = distance[i];
         curvature = 1/dist;
         velocity = calculateVelocity(curvature);
@@ -148,8 +166,8 @@ int main(int argc, char** argv){
     std::cout << "The total_distance is: " << total_distance << std::endl;
 
     //Calculate the cleaning Area 
-    //double cleaning_area = cleaning_robot.calculateCleaningArea(robot, robot_cleaning_gadget, robot_path);
-    //std::cout << "CleaningArea: " << cleaning_area << std::endl;
+    double cleaning_area = cleaning_robot.calculateCleaningArea(robot, robot_cleaning_gadget, distance);
+    std::cout << "CleaningArea: " << cleaning_area << std::endl;
 
     // Calculate the time for the complete path depends on the velocity from the robot
     double total_time = cleaning_robot.calculateTimeOfPath(distance);
