@@ -1,8 +1,0 @@
-prefix=/home/markus/kaercher/build/devel
-
-Name: kaercher
-Description: Description of kaercher
-Version: 0.0.0
-Cflags: -I/home/markus/kaercher/include
-Libs: -L${prefix}/lib -lkaercher
-Requires: roscpp
