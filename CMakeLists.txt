@@ -4,14 +4,11 @@ project(kaercher)
 ## Compile as C++11, supported in ROS Kinetic and newer
 add_compile_options(-std=c++11)
 
-# For testing purpose
-#enable_testing()
-
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-#  rostest REQUIRED
+  rostest REQUIRED
   roscpp 
 )
 
@@ -74,13 +71,20 @@ add_executable(${PROJECT_NAME}_node src/kaercher_node.cpp)
 #############
 
 # For testing purpose
-#add_executable(test_kaercher test/test_kaercher.cpp)
-#target_link_libraries(test_kaercher
-#  ${catkin_LIBRARIES}
-#  jsoncpp
-#)
+add_executable(test_kaercher test/test_kaercher.cpp)
+target_link_libraries(test_kaercher
+  ${catkin_LIBRARIES}
+  jsoncpp
+  cleaning_robot
+)
 
-#add_rostest_gtest(test_kaercher launch/test_kaercher.launch est/test_kaercher.cpp)
+
+enable_testing()
+
+add_test(
+  NAME test_cleaning_robot
+  COMMAND test_kaercher
+  )
 
 ## Add gtest based cpp test target and link libraries
 # catkin_add_gtest(${PROJECT_NAME}-test test/test_kaercher_pkg.cpp)

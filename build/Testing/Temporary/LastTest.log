@@ -1,0 +1,21 @@
+Start testing: Jun 25 06:40 PDT
+----------------------------------------------------------
+1/1 Testing: test_cleaning_robot
+1/1 Test: test_cleaning_robot
+Command: "/home/markus/kaercher/build/devel/lib/kaercher/test_kaercher"
+Directory: /home/markus/kaercher/build
+"test_cleaning_robot" start time: Jun 25 06:40 PDT
+Output:
+----------------------------------------------------------
+the function calculatePath works 1
+the function calculateCleaningArea works 0
+the function calculateTimeOfPath works 1
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Failed.
+"test_cleaning_robot" end time: Jun 25 06:40 PDT
+"test_cleaning_robot" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Jun 25 06:40 PDT

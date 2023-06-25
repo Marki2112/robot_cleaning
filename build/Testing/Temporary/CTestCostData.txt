@@ -1,0 +1,5 @@
+test/test_kaercher.cpp 0 0
+test_cleaning:robot 0 0
+test_cleaning_robot 1 0
+---
+test_cleaning_robot

@@ -4,8 +4,8 @@ Json::Value cleaning_robot::readJsonFile(std::string jsonfile){
     
     Json::Value robot_information;
     Json::Reader reader;
-    
     std::ifstream robot_file(jsonfile);
+     
     reader.parse(robot_file, robot_information);
 
     return robot_information;
@@ -119,7 +119,6 @@ double cleaning_robot::calculateCleaningArea(Json::Value CleaningGadget, std::ve
         //std::cout << dist << " " << lenghtOfCleanGadget << " " << cleaningArea << std::endl;
         resCleaningArea += cleaningArea;
     }
-
 
     return resCleaningArea;
 }

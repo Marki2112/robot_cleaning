@@ -18,7 +18,7 @@ int main(int argc, char** argv){
 
     // Check if json available?
     if(private_nh.getParam("jsonfile", jsonfile)){
-        ROS_INFO("Read Json-File");
+        ROS_INFO("Read Json-File ");
         robot_info = cleaning_robot.readJsonFile(jsonfile);
     }
     else{
