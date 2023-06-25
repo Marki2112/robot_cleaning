@@ -1,5 +1,6 @@
 #include "cleaning_robot.h"
 
+// Reading a json-file and give it back
 Json::Value cleaning_robot::readJsonFile(std::string jsonfile){
     
     Json::Value robot_information;
@@ -26,6 +27,7 @@ std::vector<Point> cleaning_robot::createVector(Json::Value robot_path){
     return waypoints;
 }
 
+// Calculating the Length of two Points
 double cleaning_robot::calculateLength(const Point& start, const Point& end){
     double length; 
     
@@ -101,22 +103,30 @@ double cleaning_robot::calculateVelocity(double curvature){
     return velRobot;
 }
 
+// Calculating the Cleaning Area
 double cleaning_robot::calculateCleaningArea(Json::Value CleaningGadget, std::vector<double> distance){
     
     double resCleaningArea = 0.0;
     double cleaningArea = 0.0;
     double lenghtOfCleanGadget = 0.0;
     double dist = 0.0;
+    Point CleanGadgetA, CleanGadgetB;
+
+    // Change from Json to the Struct Point
+    CleanGadgetA.x = CleaningGadget[0][0].asDouble();
+    CleanGadgetA.y = CleaningGadget[0][1].asDouble();
+    CleanGadgetB.x = CleaningGadget[1][0].asDouble();
+    CleanGadgetB.y = CleaningGadget[1][1].asDouble();
+
     
     // calculating the lenght of the cleaning device
-    lenghtOfCleanGadget = fabs(CleaningGadget[0][1].asDouble()) + fabs(CleaningGadget[1][1].asDouble());
+    lenghtOfCleanGadget = calculateLength(CleanGadgetA, CleanGadgetB);
     
     // Calculating the Area of Cleaning    
     for(size_t i = 0; i <=distance.size(); i++)
     {   
         dist = distance[i];
         cleaningArea = lenghtOfCleanGadget * dist;
-        //std::cout << dist << " " << lenghtOfCleanGadget << " " << cleaningArea << std::endl;
         resCleaningArea += cleaningArea;
     }
 

@@ -30,6 +30,7 @@ int main(int argc, char** argv){
     Json::Value robot_path = robot_info["path"];
     Json::Value robot_cleaning_gadget = robot_info["cleaning_gadget"];
 
+    // Checking if the Json-File is empty
     if (robot_cleaning_gadget.empty() or robot_path.empty())
     {
         return -1;
